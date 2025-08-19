@@ -42,3 +42,23 @@ class Product(models.Model):
         verbose_name = "продукт"
         verbose_name_plural = "продукты"
         ordering = ["name", "price", "created_at"]
+
+
+class Contact(models.Model):
+    """Модель контакта"""
+
+    country = models.CharField(max_length=30, verbose_name="Страна")
+    tin = models.CharField(max_length=20, verbose_name="ИНН")
+    address = models.TextField(verbose_name="Адрес")
+    created_at = models.DateTimeField(verbose_name="Дата создания", auto_now_add=True)
+    updated_at = models.DateTimeField(verbose_name="Дата обновления", auto_now=True)
+
+    def __str__(self):
+        """Строковое представление объекта категории"""
+
+        return f"Страна: {self.country}, ИНН: {self.tin}, Адрес: {self.address}"
+
+    class Meta:
+        verbose_name = "контакт"
+        verbose_name_plural = "контакты"
+        ordering = ["country", "tin"]

@@ -1,0 +1,32 @@
+[
+{
+    "model": "catalog.category",
+    "pk": 1,
+    "fields": {
+        "name": "Продукты питания",
+        "description": "Всё, что можно съесть без вреда для здоровья",
+        "created_at": "2025-08-18T18:00:06.671Z",
+        "updated_at": "2025-08-18T18:00:06.671Z"
+    }
+},
+{
+    "model": "catalog.category",
+    "pk": 2,
+    "fields": {
+        "name": "Одежда",
+        "description": "Абсолютно всё, что вы сможете на себя надеть",
+        "created_at": "2025-08-18T18:03:18.626Z",
+        "updated_at": "2025-08-18T18:03:18.627Z"
+    }
+},
+{
+    "model": "catalog.category",
+    "pk": 3,
+    "fields": {
+        "name": "Метизы",
+        "description": "Металлический крепеж",
+        "created_at": "2025-08-19T05:13:43.121Z",
+        "updated_at": "2025-08-19T05:13:43.121Z"
+    }
+}
+]

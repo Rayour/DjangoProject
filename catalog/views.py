@@ -8,9 +8,18 @@ def home(request):
     """Функция рендера домашней страницы"""
 
     products = Product.objects.order_by("created_at")
-    context = {"products": products[:5]}
-    print(context)
-    return render(request, 'home.html')
+    context = {"products": products}
+
+    return render(request, 'home.html', context=context)
+
+
+def product_detail(request, product_id):
+    """Функция рендера домашней страницы"""
+
+    product = Product.objects.get(id=product_id)
+    context = {"product": product}
+
+    return render(request, 'product_detail.html', context=context)
 
 
 def contacts(request):
@@ -27,5 +36,7 @@ def contacts(request):
 
         return HttpResponse(f"Спасибо, {name}! Ваше сообщение получено.")
     contact = Contact.objects.get(id=1)
-    print(contact)
-    return render(request, 'contacts.html')
+    context = {
+        "contact": contact
+    }
+    return render(request, 'contacts.html', context=context)

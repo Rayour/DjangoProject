@@ -1,12 +1,9 @@
-import os.path
-
-from django.conf import settings
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, View
 
-from catalog.models import Contact, Product, Category
+from catalog.models import Contact, Product
 
 
 class ProductListView(ListView):

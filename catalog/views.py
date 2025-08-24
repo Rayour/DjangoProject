@@ -2,6 +2,7 @@ from django.http import HttpResponse
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, View
+from .forms import ProductForm
 
 from catalog.models import Contact, Product
 
@@ -102,6 +103,6 @@ class ProductCreateView(CreateView):
     """Класс представления создания продукта"""
 
     model = Product
-    fields = ["name", "description", "category", "price", "image"]
+    form_class = ProductForm
     template_name = "add_product.html"
     success_url = reverse_lazy('catalog:home')

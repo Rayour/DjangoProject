@@ -1,6 +1,7 @@
 from django import forms
 from django.core.exceptions import ValidationError
 from .models import Product
+from PIL import Image
 
 BLACK_LIST = [
             "казино",
@@ -77,3 +78,27 @@ class ProductForm(forms.ModelForm):
         if price <= 0:
             raise ValidationError("Цена продукта на может быть меньше или равной 0")
         return price
+
+    def clean_image(self):
+        """Метод валидации изображения товара.
+        Проверка формата (jpeg, png) и размера (5Mb max)"""
+
+        image = self.cleaned_data.get("image")
+
+        if image:
+            try:
+                img = Image.open(image.file)
+                img_format = img.format
+
+                allowed_formats = ['PNG', 'JPEG']
+
+                if img_format not in allowed_formats:
+                    raise forms.ValidationError("Необходимо загрузить фото в формате .png или .jpeg")
+                image.file.seek(0)
+
+            except Exception:
+                raise forms.ValidationError("Загруженный файл не является изображением")
+
+            if image.size > 5 * 1024 * 1024:
+                raise forms.ValidationError("Файл слишком тяжелый. Максимальный допустимый вес: 5 Mb.")
+        return image

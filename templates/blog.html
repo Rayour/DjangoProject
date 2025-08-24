@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block title %}Блог{% endblock %}
+
+{% block pagetitle %}
+<div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+    <h1 class="display-4">Блог</h1>
+    <p class="lead">Здесь собраны все самые актуальные статьи!</p>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="mb-4">Список статей:</h1>
+    <a href="{% url 'blog:article_create' %}" class="btn btn-primary mb-3">Создать статью</a>
+    <ul class="list-group">
+        {% for article in articles %}
+            <li class="list-group-item">
+                <a href="{% url 'blog:article_detail' article.pk %}">{{ article.title|truncatechars:50 }}</a>
+                <a href="{% url 'blog:article_edit' article.pk %}" class="btn btn-sm btn-secondary ml-3">Редактировать</a>
+                <a href="{% url 'blog:article_delete' article.pk %}" class="btn btn-sm btn-danger ml-1">Удалить</a>
+            </li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

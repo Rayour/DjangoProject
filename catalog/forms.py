@@ -16,12 +16,17 @@ BLACK_LIST = [
 
 
 class ProductForm(forms.ModelForm):
+    """Класс формы для создания продукта"""
 
     class Meta:
+        """Описание формы для создания продукта"""
+
         model = Product
         fields = ["name", "description", "image", "category", "price"]
 
     def __init__(self, *args, **kwargs):
+        """Метод инициализации формы. Добавление стилизации"""
+
         super(ProductForm, self).__init__(*args, **kwargs)
 
         self.fields["name"].widget.attrs.update({
@@ -45,6 +50,8 @@ class ProductForm(forms.ModelForm):
         })
 
     def clean_name(self):
+        """Метод валидации названия. Запрет на слова из черного списка"""
+
         name = self.cleaned_data.get("name")
 
         for word in BLACK_LIST:
@@ -53,6 +60,8 @@ class ProductForm(forms.ModelForm):
         return name
 
     def clean_description(self):
+        """Метод валидации описания. Запрет на слова из черного списка"""
+
         description = self.cleaned_data.get("description")
 
         for word in BLACK_LIST:
@@ -61,6 +70,8 @@ class ProductForm(forms.ModelForm):
         return description
 
     def clean_price(self):
+        """Метод валидации цены. Цена должна быть больше нуля"""
+
         price = self.cleaned_data.get("price")
 
         if price <= 0:

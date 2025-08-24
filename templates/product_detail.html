@@ -10,9 +10,13 @@
 {% endblock %}
 
 {% block content %}
-<div class="row text-center">
+<div class="text-center">
     <div class="col-12">
+        <a href="{% url 'catalog:edit_product' product.pk %}" class="btn btn-secondary mb-4">Редактировать</a>
+        <a href="{% url 'catalog:delete_product' product.pk %}" class="btn btn-danger mb-4">Удалить</a>
+        <a href="{% url 'catalog:home' %}" class="btn btn-primary mb-4">Вернуться к списку</a>
         <div class="card mb-4 box-shadow">
+
             <div class="card-header">
                 <h4 class="my-0 font-weight-normal">{{ product.price }} ₽</h4>
             </div>

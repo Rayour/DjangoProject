@@ -2,6 +2,7 @@ from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, DeleteView, UpdateView
 
 from blog.models import Article
+from .forms import ArticleForm
 
 
 class BlogListView(ListView):
@@ -23,7 +24,7 @@ class BlogCreateView(CreateView):
 
     model = Article
     template_name = "add_edit_article.html"
-    fields = ["title", "content", "image", "is_published"]
+    form_class = ArticleForm
     success_url = reverse_lazy('blog:article_list')
 
 
@@ -32,7 +33,7 @@ class BlogUpdateView(UpdateView):
 
     model = Article
     template_name = "add_edit_article.html"
-    fields = ["title", "content", "image", "is_published"]
+    form_class = ArticleForm
 
     def get_success_url(self):
         """Метод формирования ссылки для редиректа при успешном редактировании"""
@@ -58,8 +59,8 @@ class BlogDetailView(DetailView):
 
 
 class BlogDeleteView(DeleteView):
-    """Класс представления редактирования статьи блога"""
+    """Класс представления удаления статьи блога"""
 
     model = Article
-    template_name = "delete_confirm.html"
+    template_name = "article_delete_confirm.html"
     success_url = reverse_lazy('blog:article_list')

@@ -59,8 +59,8 @@ class BlogDetailView(DetailView):
 
 
 class BlogDeleteView(DeleteView):
-    """Класс представления редактирования статьи блога"""
+    """Класс представления удаления статьи блога"""
 
     model = Article
-    template_name = "delete_confirm.html"
+    template_name = "article_delete_confirm.html"
     success_url = reverse_lazy('blog:article_list')

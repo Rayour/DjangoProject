@@ -16,7 +16,9 @@
     <a href="{% url 'blog:article_edit' article.pk %}" class="btn btn-secondary">Редактировать</a>
     <a href="{% url 'blog:article_delete' article.pk %}" class="btn btn-danger">Удалить</a>
     <a href="{% url 'blog:article_list' %}" class="btn btn-primary">Вернуться к списку</a>
-    <img class="preview" src="{{ article.image.url }}" alt="{{ article.title}}" />
+    {% if article.image %}
+        <img class="preview" src="{{ article.image.url }}" alt="{{ article.title}}" />
+    {% endif %}
     <p class="lead">{{ article.content }}</p>
 </div>
 {% endblock %}

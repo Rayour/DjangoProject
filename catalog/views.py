@@ -1,7 +1,8 @@
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.urls import reverse_lazy
-from django.views.generic import ListView, DetailView, CreateView, View
+from django.views.generic import ListView, DetailView, CreateView, View, UpdateView, DeleteView
+from .forms import ProductForm
 
 from catalog.models import Contact, Product
 
@@ -102,6 +103,28 @@ class ProductCreateView(CreateView):
     """Класс представления создания продукта"""
 
     model = Product
-    fields = ["name", "description", "category", "price", "image"]
+    form_class = ProductForm
     template_name = "add_product.html"
+    success_url = reverse_lazy('catalog:home')
+
+
+class ProductUpdateView(UpdateView):
+    """Класс представления редактирования продукта"""
+
+    model = Product
+    form_class = ProductForm
+    template_name = "add_product.html"
+    success_url = reverse_lazy('catalog:home')
+
+    def get_success_url(self):
+        """Метод формирования ссылки для редиректа при успешном редактировании"""
+
+        return reverse_lazy('catalog:product_detail', kwargs={'pk': self.object.pk})
+
+
+class ProductDeleteView(DeleteView):
+    """Класс представления удаления продукта"""
+
+    model = Product
+    template_name = "product_delete_confirm.html"
     success_url = reverse_lazy('catalog:home')

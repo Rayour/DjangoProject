@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block title %}Подтверждение удаления товара{% endblock %}
+
+{% block pagetitle %}
+<div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+    <h1 class="display-4">Удаление товара</h1>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="row text-start">
+    <div class="col-12">
+        <div class="mb-4">
+            <p>Вы действительно хотите удалить товар <b>"{{product.name}}"</b>?.</p>
+            <form method="post" class="form-floating">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-lg btn-block btn-danger">Удалить</button>
+                <a href="{% url 'catalog:product_detail' product.pk %}" class="btn btn-secondary">Отмена</a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,11 +1,14 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
-from django.views.generic import ListView, DetailView, CreateView, DeleteView, UpdateView
+from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
+                                  UpdateView)
 
 from blog.models import Article
+
 from .forms import ArticleForm
 
 
-class BlogListView(ListView):
+class BlogListView(LoginRequiredMixin, ListView):
     """Класс представления списка статей блога"""
 
     model = Article
@@ -19,7 +22,7 @@ class BlogListView(ListView):
         return articles
 
 
-class BlogCreateView(CreateView):
+class BlogCreateView(LoginRequiredMixin, CreateView):
     """Класс представления создания статьи блога"""
 
     model = Article
@@ -28,7 +31,7 @@ class BlogCreateView(CreateView):
     success_url = reverse_lazy('blog:article_list')
 
 
-class BlogUpdateView(UpdateView):
+class BlogUpdateView(LoginRequiredMixin, UpdateView):
     """Класс представления редактирования статьи блога"""
 
     model = Article
@@ -41,7 +44,7 @@ class BlogUpdateView(UpdateView):
         return reverse_lazy('blog:article_detail', kwargs={'pk': self.object.pk})
 
 
-class BlogDetailView(DetailView):
+class BlogDetailView(LoginRequiredMixin, DetailView):
     """Класс представления детальной информации о статье"""
 
     model = Article
@@ -58,7 +61,7 @@ class BlogDetailView(DetailView):
         return article
 
 
-class BlogDeleteView(DeleteView):
+class BlogDeleteView(LoginRequiredMixin, DeleteView):
     """Класс представления удаления статьи блога"""
 
     model = Article

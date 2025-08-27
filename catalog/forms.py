@@ -1,7 +1,8 @@
 from django import forms
 from django.core.exceptions import ValidationError
-from .models import Product
 from PIL import Image
+
+from .models import Product
 
 BLACK_LIST = [
             "казино",

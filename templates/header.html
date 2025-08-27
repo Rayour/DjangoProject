@@ -6,6 +6,7 @@
         <a class="p-2 btn btn-outline-primary" href="{% url 'catalog:contacts' %}">Контакты</a>
         <a class="p-2 btn btn-outline-primary" href="{% url 'catalog:add_product' %}">Добавить товар</a>
         <a class="p-2 btn btn-outline-primary" href="{% url 'blog:article_list' %}">Наш блог</a>
+        <a class="p-2 btn btn-outline-primary" href="{% url 'users:edit_profile' %}">Редактировать профиль</a>
         <form method="post" action="{% url 'users:logout' %}" style="display: inline;">
             {% csrf_token %}
             <button type="submit" class="btn btn-outline-primary">Выйти</button>

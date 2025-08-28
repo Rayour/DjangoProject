@@ -10,7 +10,7 @@
     border-radius: 5px;
     display: block;
 }
-/*
+
 label {
     display: block;
 }
@@ -22,7 +22,7 @@ input:not([type="file"]) {
     border: 1px solid #575757;
     width: 100%;
 }
-
+/*
 input[type="checkbox"] {
     display: inline-block;
     width: auto;

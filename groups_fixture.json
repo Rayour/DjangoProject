@@ -374,8 +374,35 @@
     "fields": {
         "name": "Product_moderator",
         "permissions": [
-            25,
             41,
+            27,
+            28
+        ]
+    }
+},
+{
+    "model": "auth.group",
+    "pk": 2,
+    "fields": {
+        "name": "Content_manager",
+        "permissions": [
+            33,
+            34,
+            35,
+            36
+        ]
+    }
+},
+{
+    "model": "auth.group",
+    "pk": 3,
+    "fields": {
+        "name": "Base_user",
+        "permissions": [
+            36,
+            24,
+            25,
+            26,
             27,
             28
         ]

@@ -110,6 +110,15 @@ class ProductCreateView(LoginRequiredMixin, CreateView):
     template_name = "add_product.html"
     success_url = reverse_lazy('catalog:home')
 
+    def form_valid(self, form):
+        """При успешном заполнении формы метод добавляет создателя как владельца"""
+
+        product = form.save()
+        user = self.request.user
+        product.owner = user
+        user.save()
+        return super().form_valid(form)
+
 
 class ProductUpdateView(LoginRequiredMixin, UpdateView):
     """Класс представления редактирования продукта"""

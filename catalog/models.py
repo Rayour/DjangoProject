@@ -1,4 +1,5 @@
 from django.db import models
+from users.models import CustomUser
 
 
 class Category(models.Model):
@@ -32,6 +33,7 @@ class Product(models.Model):
     price = models.FloatField(verbose_name="Цена", help_text="Укажите стоимость единицы товара")
     is_published = models.BooleanField(verbose_name="Опубликован?", null=True, blank=True, default=False,
                                        help_text="Только опубликованные продукты отображаются в каталоге")
+    owner = models.ForeignKey(CustomUser, verbose_name="Владелец", null=True, blank=True, on_delete=models.SET_NULL)
     created_at = models.DateTimeField(verbose_name="Дата создания", auto_now_add=True)
     updated_at = models.DateTimeField(verbose_name="Дата обновления", auto_now=True)
 

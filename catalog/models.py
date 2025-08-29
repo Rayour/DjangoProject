@@ -30,6 +30,8 @@ class Product(models.Model):
                               help_text="Загрузите изображение товара")
     category = models.ForeignKey(Category, verbose_name="Категория", on_delete=models.CASCADE, related_name="products")
     price = models.FloatField(verbose_name="Цена", help_text="Укажите стоимость единицы товара")
+    is_published = models.BooleanField(verbose_name="Опубликован?", null=True, blank=True, default=False,
+                                       help_text="Только опубликованные продукты отображаются в каталоге")
     created_at = models.DateTimeField(verbose_name="Дата создания", auto_now_add=True)
     updated_at = models.DateTimeField(verbose_name="Дата обновления", auto_now=True)
 
@@ -42,6 +44,9 @@ class Product(models.Model):
         verbose_name = "продукт"
         verbose_name_plural = "продукты"
         ordering = ["name", "price", "created_at"]
+        permissions = [
+            ('can_unpublish_product', 'Can unpublish product'),
+        ]
 
 
 class Contact(models.Model):

@@ -12,9 +12,12 @@
 
 {% block content %}
 <div class="text-center">
-
+    {% if perms.blog.change_article %}
     <a href="{% url 'blog:article_edit' article.pk %}" class="btn btn-secondary">Редактировать</a>
+    {% endif %}
+    {% if perms.blog.delete_article %}
     <a href="{% url 'blog:article_delete' article.pk %}" class="btn btn-danger">Удалить</a>
+    {% endif %}
     <a href="{% url 'blog:article_list' %}" class="btn btn-primary">Вернуться к списку</a>
     {% if article.image %}
         <img class="preview" src="{{ article.image.url }}" alt="{{ article.title}}" />

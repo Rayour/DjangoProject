@@ -82,7 +82,7 @@ class ProductDetailView(DetailView):
         product = super().get_object()
         user = self.request.user
         if not (user == product.owner or user.has_perm(
-                "catalog.can_unpublish_product")) and product.is_published == False:
+                "catalog.can_unpublish_product")) and not product.is_published:
             raise PermissionDenied
 
         return product
@@ -171,7 +171,7 @@ class ProductDeleteView(LoginRequiredMixin, DeleteView):
 
         product = super().get_object()
         user = self.request.user
-        if not (user == product.owner or user.has_perm("catalog.can_delete_product")):
+        if not (user == product.owner or user.has_perm("catalog.delete_product")):
             raise PermissionDenied
 
         return product

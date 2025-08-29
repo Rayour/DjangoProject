@@ -1,4 +1,5 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.exceptions import PermissionDenied
 from django.urls import reverse_lazy
 from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
                                   UpdateView)
@@ -27,8 +28,15 @@ class BlogCreateView(LoginRequiredMixin, CreateView):
 
     model = Article
     template_name = "add_edit_article.html"
-    form_class = ArticleForm
     success_url = reverse_lazy('blog:article_list')
+
+    def get_form_class(self):
+        """Метод получения формы если у пользователя есть права на создание"""
+
+        user = self.request.user
+        if user.has_perm("blog.add_article"):
+            return ArticleForm
+        raise PermissionDenied
 
 
 class BlogUpdateView(LoginRequiredMixin, UpdateView):
@@ -37,6 +45,16 @@ class BlogUpdateView(LoginRequiredMixin, UpdateView):
     model = Article
     template_name = "add_edit_article.html"
     form_class = ArticleForm
+
+    def get_object(self, queryset=None):
+        """Метод получения объекта статьи"""
+
+        article = super().get_object()
+        user = self.request.user
+        if not user.has_perm("blog.delete_article"):
+            raise PermissionDenied
+
+        return article
 
     def get_success_url(self):
         """Метод формирования ссылки для редиректа при успешном редактировании"""
@@ -67,3 +85,13 @@ class BlogDeleteView(LoginRequiredMixin, DeleteView):
     model = Article
     template_name = "article_delete_confirm.html"
     success_url = reverse_lazy('blog:article_list')
+
+    def get_object(self, queryset=None):
+        """Метод получения объекта статьи"""
+
+        article = super().get_object()
+        user = self.request.user
+        if not user.has_perm("blog.delete_article"):
+            raise PermissionDenied
+
+        return article

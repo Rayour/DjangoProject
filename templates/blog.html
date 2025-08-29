@@ -12,13 +12,19 @@
 {% block content %}
 <div class="container mt-5">
     <h1 class="mb-4">Список статей:</h1>
+    {% if perms.blog.add_article %}
     <a href="{% url 'blog:article_create' %}" class="btn btn-primary mb-3">Создать статью</a>
+    {% endif %}
     <ul class="list-group">
         {% for article in articles %}
             <li class="list-group-item">
                 <a href="{% url 'blog:article_detail' article.pk %}">{{ article.title|truncatechars:50 }}</a>
+                {% if perms.blog.change_article %}
                 <a href="{% url 'blog:article_edit' article.pk %}" class="btn btn-sm btn-secondary ml-3">Редактировать</a>
+                {% endif %}
+                {% if perms.blog.delete_article %}
                 <a href="{% url 'blog:article_delete' article.pk %}" class="btn btn-sm btn-danger ml-1">Удалить</a>
+                {% endif %}
             </li>
         {% endfor %}
     </ul>

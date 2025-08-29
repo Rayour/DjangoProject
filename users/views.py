@@ -1,15 +1,16 @@
 from django.contrib.auth import get_user_model, login
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.models import Group
 from django.core.mail import send_mail
 from django.urls import reverse_lazy
 from django.views.generic.edit import CreateView, UpdateView
-from django.contrib.auth.models import Group
 
 from config.settings import DEFAULT_FROM_EMAIL
 
 from .forms import CustomUserChangeForm, CustomUserCreationForm
 
 User = get_user_model()
+
 
 class CustomUserCreateView(CreateView):
     """Класс представления для создания пользователя"""

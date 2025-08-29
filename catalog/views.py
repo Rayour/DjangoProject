@@ -81,7 +81,8 @@ class ProductDetailView(DetailView):
 
         product = super().get_object()
         user = self.request.user
-        if not (user == product.owner or user.has_perm("catalog.can_unpublish_product")):
+        if not (user == product.owner or user.has_perm(
+                "catalog.can_unpublish_product")) and product.is_published == False:
             raise PermissionDenied
 
         return product
@@ -124,11 +125,14 @@ class ProductCreateView(LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         """При успешном заполнении формы метод добавляет создателя как владельца"""
 
-        product = form.save()
         user = self.request.user
+        if not user.has_perm("catalog.can_add_product"):
+            raise PermissionDenied
+        product = form.save()
         product.owner = user
         user.save()
         return super().form_valid(form)
+
 
 
 class ProductUpdateView(LoginRequiredMixin, UpdateView):
@@ -161,6 +165,16 @@ class ProductDeleteView(LoginRequiredMixin, DeleteView):
     model = Product
     template_name = "product_delete_confirm.html"
     success_url = reverse_lazy('catalog:home')
+
+    def get_object(self, queryset=None):
+        """Метод получения объекта продукта"""
+
+        product = super().get_object()
+        user = self.request.user
+        if not (user == product.owner or user.has_perm("catalog.can_delete_product")):
+            raise PermissionDenied
+
+        return product
 
     def form_valid(self, form):
         """Метод проверяет наличие прав перед удалением"""

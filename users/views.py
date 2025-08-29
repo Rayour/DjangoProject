@@ -3,6 +3,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.mail import send_mail
 from django.urls import reverse_lazy
 from django.views.generic.edit import CreateView, UpdateView
+from django.contrib.auth.models import Group
 
 from config.settings import DEFAULT_FROM_EMAIL
 
@@ -19,6 +20,9 @@ class CustomUserCreateView(CreateView):
 
     def form_valid(self, form):
         user = form.save()
+        group = Group.objects.get(name="Base_user")
+        user.groups.add(group)
+        user.save()
         login(self.request, user)
         self.send_welcome_email(user.email)
         return super().form_valid(form)

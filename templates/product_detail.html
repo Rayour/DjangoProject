@@ -12,7 +12,7 @@
 {% block content %}
 <div class="text-center">
     <div class="col-12">
-        {% if user.is_authenticated %}
+        {% if perms.catalog.can_unpublish_product or user == product.owner %}
         <a href="{% url 'catalog:edit_product' product.pk %}" class="btn btn-secondary mb-4">Редактировать</a>
         <a href="{% url 'catalog:delete_product' product.pk %}" class="btn btn-danger mb-4">Удалить</a>
         {% endif %}

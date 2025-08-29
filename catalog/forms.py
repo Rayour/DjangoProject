@@ -5,16 +5,16 @@ from PIL import Image
 from .models import Product
 
 BLACK_LIST = [
-            "казино",
-            "криптовалюта",
-            "крипта",
-            "биржа",
-            "дешево",
-            "бесплатно",
-            "обман",
-            "полиция",
-            "радар"
-        ]
+    "казино",
+    "криптовалюта",
+    "крипта",
+    "биржа",
+    "дешево",
+    "бесплатно",
+    "обман",
+    "полиция",
+    "радар"
+]
 
 
 class ProductForm(forms.ModelForm):
@@ -103,3 +103,31 @@ class ProductForm(forms.ModelForm):
             if image.size > 5 * 1024 * 1024:
                 raise forms.ValidationError("Файл слишком тяжелый. Максимальный допустимый вес: 5 Mb.")
         return image
+
+
+class ProductModeratorForm(forms.ModelForm):
+    """Класс формы для модератора продукта"""
+
+    class Meta:
+        """Описание формы для модератора продукта"""
+
+        model = Product
+        fields = ["is_published"]
+
+    def __init__(self, *args, **kwargs):
+        """Метод инициализации формы. Добавление стилизации"""
+
+        super(ProductModeratorForm, self).__init__(*args, **kwargs)
+
+        self.fields["is_published"].widget.attrs.update({
+            "class": "form-check",
+        })
+
+    def clean_is_published(self):
+        """Метод проверяет, что продукт снимается с публикации при редактировании"""
+
+        is_published = self.cleaned_data.get("is_published")
+
+        if is_published:
+            raise ValidationError("Вы можете только снять продукт с публикации, но не опубликовать его.")
+        return is_published

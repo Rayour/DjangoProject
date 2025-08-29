@@ -31,7 +31,7 @@ class Product(models.Model):
                               help_text="Загрузите изображение товара")
     category = models.ForeignKey(Category, verbose_name="Категория", on_delete=models.CASCADE, related_name="products")
     price = models.FloatField(verbose_name="Цена", help_text="Укажите стоимость единицы товара")
-    is_published = models.BooleanField(verbose_name="Опубликован?", null=True, blank=True, default=False,
+    is_published = models.BooleanField(verbose_name="Опубликован?", null=True, blank=True, default=True,
                                        help_text="Только опубликованные продукты отображаются в каталоге")
     owner = models.ForeignKey(CustomUser, verbose_name="Владелец", null=True, blank=True, on_delete=models.SET_NULL)
     created_at = models.DateTimeField(verbose_name="Дата создания", auto_now_add=True)

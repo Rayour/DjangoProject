@@ -11,6 +11,11 @@
 {% endblock %}
 
 {% block content %}
+<div class="btn-group mb-3">
+    {% for category in categories %}
+        <a href="{% url 'catalog:category_list' category.pk %}" class="btn btn-primary {% if category.id == category_id %}active{% endif %}">{{category.name}}</a>
+    {% endfor %}
+</div>
 <div class="row text-center">
     {% for product in products %}
     <div class="col-lg-3 col-md-6 col-sm-12">
@@ -34,23 +39,24 @@
     <nav aria-label="Page navigation example">
         <ul class="pagination">
             {% if page == 1 %}
-                <li class="page-item disabled"><a class="page-link" href="/?page=1">Previous</a></li>
+                <li class="page-item disabled"><a class="page-link" {% if category_id == 0 %} href="/?page=1" {% else %} href="/category/{{category_id}}/?page=1" {% endif %}>Previous</a></li>
             {% else %}
-                <li class="page-item"><a class="page-link" href="/?page={{ prev_page }}">Previous</a></li>
+                <li class="page-item"><a class="page-link" {% if category_id == 0 %} href="/?page={{ prev_page }}" {% else %} href="/category/{{category_id}}/?page={{ prev_page }}" {% endif %}>Previous</a></li>
             {% endif %}
             {% for i in pages %}
                 {% if i == page %}
-                    <li class="page-item active"><a class="page-link" href="/?page={{ i }}">{{ i }}</a></li>
+                    <li class="page-item active"><a class="page-link" {% if category_id == 0 %} href="/?page={{ i }}" {% else %} href="/category/{{category_id}}/?page={{ i }}" {% endif %}>{{ i }}</a></li>
                 {% else %}
-                    <li class="page-item"><a class="page-link" href="/?page={{ i }}">{{ i }}</a></li>
+                    <li class="page-item"><a class="page-link" {% if category_id == 0 %} href="/?page={{ i }}" {% else %} href="/category/{{category_id}}/?page={{ i }}" {% endif %}>{{ i }}</a></li>
                 {% endif %}
             {% endfor %}
             {% if page == page_count %}
-                <li class="page-item disabled"><a class="page-link" href="/?page={{ page }}">Next</a></li>
+                <li class="page-item disabled"><a class="page-link" {% if category_id == 0 %} href="/?page={{ page }}" {% else %} href="/category/{{category_id}}/?page={{ page }}" {% endif %}>Next</a></li>
             {% else %}
-                <li class="page-item"><a class="page-link" href="/?page={{ next_page }}">Next</a></li>
+                <li class="page-item"><a class="page-link" {% if category_id == 0 %} href="/?page={{ next_page }}" {% else %} href="/category/{{category_id}}/?page={{ next_page }}" {% endif %}>Next</a></li>
             {% endif %}
         </ul>
     </nav>
 </div>
 {% endblock %}
+{% if category_id == 0 %} {% else %} {% endif %}

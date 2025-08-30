@@ -6,9 +6,12 @@ from django.urls import reverse_lazy
 from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
                                   UpdateView, View)
 
-from catalog.models import Contact, Product
+from catalog.models import Category, Contact, Product
 
 from .forms import ProductForm, ProductModeratorForm
+from .services import CategoryService, ProductService
+
+PER_PAGE = 4
 
 
 class ProductListView(ListView):
@@ -21,8 +24,6 @@ class ProductListView(ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         """Метод получения контекста"""
 
-        PER_PAGE = 4
-
         if self.request.GET.get('page'):
             try:
                 page = int(self.request.GET.get('page'))
@@ -31,34 +32,16 @@ class ProductListView(ListView):
         else:
             page = 1
 
-        products_count = Product.objects.filter(is_published=True).count()
-        print(products_count)
-
-        if products_count % PER_PAGE:
-            page_count = products_count // PER_PAGE + 1
-        else:
-            page_count = products_count // PER_PAGE
-
-        pages = [i + 1 for i in range(page_count)]
-
-        if 1 < page < page_count:
-            prev_page = page - 1
-            next_page = page + 1
-        elif page <= 1:
-            page = 1
-            prev_page = 1
-            next_page = page + 1
-        else:
-            page = page_count
-            prev_page = page - 1
-            next_page = page_count
-
-        start = page * PER_PAGE - PER_PAGE
-        stop = start + PER_PAGE
-        products = Product.objects.filter(is_published=True).order_by("created_at")[start:stop]
+        page_count = ProductService.get_page_count(PER_PAGE, 0)
+        pages = ProductService.get_pages(page_count)
+        page, prev_page, next_page = ProductService.get_prev_next_page(page, page_count)
+        products = ProductService.get_product_page_queryset(page, PER_PAGE, 0)
+        categories = CategoryService.get_categories_list()
 
         context = {
             "products": products,
+            "categories": categories,
+            "category_id": 0,
             "page": page,
             "pages": pages,
             "prev_page": prev_page,
@@ -126,13 +109,12 @@ class ProductCreateView(LoginRequiredMixin, CreateView):
         """При успешном заполнении формы метод добавляет создателя как владельца"""
 
         user = self.request.user
-        if not user.has_perm("catalog.can_add_product"):
+        if not user.has_perm("catalog.add_product"):
             raise PermissionDenied
         product = form.save()
         product.owner = user
         user.save()
         return super().form_valid(form)
-
 
 
 class ProductUpdateView(LoginRequiredMixin, UpdateView):
@@ -183,3 +165,45 @@ class ProductDeleteView(LoginRequiredMixin, DeleteView):
         if not (user == self.object.owner or user.has_perm("catalog.can_delete_product")):
             raise PermissionDenied
         return super().form_valid(form)
+
+
+class CategoryDetailView(DetailView):
+    """Класс представления списка товаров категории"""
+
+    model = Category
+    template_name = "home.html"
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        """Метод получения контекста"""
+
+        if self.request.GET.get('page'):
+            try:
+                page = int(self.request.GET.get('page'))
+            except Exception:
+                page = 1
+        else:
+            page = 1
+
+        if CategoryService.is_category_exist(self.object.pk):
+            category_id = self.object.pk
+        else:
+            category_id = 0
+
+        page_count = ProductService.get_page_count(PER_PAGE, category_id)
+        pages = ProductService.get_pages(page_count)
+        page, prev_page, next_page = ProductService.get_prev_next_page(page, page_count)
+        products = ProductService.get_product_page_queryset(page, PER_PAGE, category_id)
+        categories = CategoryService.get_categories_list()
+
+        context = {
+            "products": products,
+            "categories": categories,
+            "category_id": category_id,
+            "page": page,
+            "pages": pages,
+            "prev_page": prev_page,
+            "next_page": next_page,
+            "page_count": page_count
+        }
+
+        return context

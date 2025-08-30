@@ -4,7 +4,9 @@
         <a class="p-2 btn btn-outline-primary" href="{% url 'catalog:home' %}">Каталог</a>
         {% if user.is_authenticated %}
         <a class="p-2 btn btn-outline-primary" href="{% url 'catalog:contacts' %}">Контакты</a>
+        {% if perms.catalog.add_product %}
         <a class="p-2 btn btn-outline-primary" href="{% url 'catalog:add_product' %}">Добавить товар</a>
+        {% endif %}
         <a class="p-2 btn btn-outline-primary" href="{% url 'blog:article_list' %}">Наш блог</a>
         <a class="p-2 btn btn-outline-primary" href="{% url 'users:edit_profile' %}">Редактировать профиль</a>
         <form method="post" action="{% url 'users:logout' %}" style="display: inline;">

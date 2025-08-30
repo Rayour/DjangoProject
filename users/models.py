@@ -7,9 +7,9 @@ class CustomUser(AbstractUser):
 
     email = models.EmailField(unique=True)
     first_name = models.CharField(max_length=20, null=True, blank=True, verbose_name="Имя",
-                                    help_text="Необязательное поле. Введите Ваше имя")
+                                  help_text="Необязательное поле. Введите Ваше имя")
     last_name = models.CharField(max_length=20, null=True, blank=True, verbose_name="Фамилия",
-                                  help_text="Необязательное поле. Введите Вашу фамилию")
+                                 help_text="Необязательное поле. Введите Вашу фамилию")
     avatar = models.ImageField(upload_to="avatars/", null=True, blank=True, verbose_name="Аватар",
                                help_text="Необязательное поле. Загрузите изображение для Вашего профиля")
     phone_number = models.CharField(max_length=15, null=True, blank=True, verbose_name="Телефон",
